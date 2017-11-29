@@ -234,7 +234,7 @@ class OneLogin_Saml2_Response(object):
                         if in_response_to and irt and irt != in_response_to:
                             continue
                         recipient = sc_data.get('Recipient', None)
-                        if recipient and current_url not in recipient:
+                        if recipient and recipient not in sp_data['entityId']:
                             continue
                         nooa = sc_data.get('NotOnOrAfter', None)
                         if nooa:
