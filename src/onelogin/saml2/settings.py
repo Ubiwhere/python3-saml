@@ -113,6 +113,18 @@ class OneLogin_Saml2_Settings(object):
                     OneLogin_Saml2_Error.SETTINGS_INVALID,
                     ','.join(self.__errors)
                 )
+        elif isinstance(settings, str):
+            try:
+                valid = self.__load_settings_from_file(
+                    settings_name=settings)
+            except Exception as e:
+                raise e
+            if not valid:
+                raise OneLogin_Saml2_Error(
+                    'Invalid str settings at the file: %s',
+                    OneLogin_Saml2_Error.SETTINGS_INVALID,
+                    ','.join(self.__errors)
+                )
         else:
             raise OneLogin_Saml2_Error(
                 'Unsupported settings object',
@@ -226,14 +238,14 @@ class OneLogin_Saml2_Settings(object):
         self.__errors = errors
         return False
 
-    def __load_settings_from_file(self):
+    def __load_settings_from_file(self, settings_name='settings.json'):
         """
         Loads settings info from the settings json file
 
         :returns: True if the settings info is valid
         :rtype: boolean
         """
-        filename = self.get_base_path() + 'settings.json'
+        filename = self.get_base_path() + settings_name
 
         if not exists(filename):
             raise OneLogin_Saml2_Error(
